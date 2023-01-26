@@ -1,0 +1,133 @@
+<html>
+<head></head>
+<body>
+<div style="border: 1px solid dimgrey">
+    <h1>Result</h1>
+    <h3 id="result"></h3>
+</div>
+<div style="border: 1px solid dimgrey">
+    <h1>Get request</h1>
+    <form action="/api/db" onsubmit="get(event);">
+        <input type="number" name="id"/>
+        <br/>
+        <input type="submit" value="GET"/>
+    </form>
+</div>
+<div style="border: 1px solid dimgrey">
+    <h1>Post request</h1>
+    <form action="/api/db" onsubmit="post(event);">
+        <input type="number" name="id"/>
+        <br/>
+        <input type="text" name="name"/>
+        <br/>
+        <input type="text" name="bday"/>
+        <br/>
+        <input type="submit" value="POST"/>
+    </form>
+</div>
+<div style="border: 1px solid dimgrey">
+    <h1>Put request</h1>
+    <form action="/api/db" onsubmit="put(event);">
+        <input type="number" name="id"/>
+        <br/>
+        <input type="text" name="name"/>
+        <br/>
+        <input type="text" name="bday"/>
+        <br/>
+        <input type="submit" value="PUT"/>
+    </form>
+</div>
+<div style="border: 1px solid dimgrey">
+    <h1>Delete request</h1>
+    <form action="/api/db" onsubmit="del(event);">
+        <input type="number" name="id"/>
+        <br/>
+        <input type="submit" value="DELETE"/>
+    </form>
+</div>
+<script>
+    var h = document.getElementById('result');
+
+    function get(event) {
+        event.preventDefault();
+        h.innerHTML = '';
+        let id = parseInt(event.target.elements.id.value);
+        if (Number.isInteger(id)) {
+            let action = event.target.action;
+            fetch(action + '?id=' + id, {method: 'get'})
+                .then(response => {
+                    if (response.ok) {
+                        response.json().then(result => {
+                            h.innerHTML = '<div>Id: ' + result.id + '</div>' +
+                                '<div>Name: ' + result.name + '</div>' +
+                                '<div>Birthday: ' + result.bday + '</div>';
+                        }).catch(error => console.log(error))
+                    } else response.text().then(text => console.log("Error:", text));
+                }).catch(error => console.log(error));
+        }
+    }
+
+    function post(event) {
+        event.preventDefault();
+        h.innerHTML = '';
+        let id = parseInt(event.target.elements.id.value);
+        if (Number.isInteger(id)) {
+            let name = event.target.elements.name.value;
+            let bday = event.target.elements.bday.value;
+            let action = event.target.action;
+            fetch(action, {
+                method: 'post',
+                body: JSON.stringify({id: id, name: name, bday: bday})
+            }).then(response => {
+                if (response.ok) {
+                    response.json().then(result => {
+                        h.innerHTML = '<div>Id: ' + result.id + '</div>' +
+                            '<div>Name: ' + result.name + '</div>' +
+                            '<div>Birthday: ' + result.bday + '</div>';
+                        alert('Added');
+                    }).catch(error => console.log(error))
+                } else response.text().then(text => console.log("Error:", text));
+            }).catch(error => console.log(error));
+        }
+    }
+
+    function put(event) {
+        event.preventDefault();
+        h.innerHTML = '';
+        let id = parseInt(event.target.elements.id.value);
+        if (Number.isInteger(id)) {
+            let name = event.target.elements.name.value;
+            let bday = event.target.elements.bday.value;
+            let action = event.target.action;
+            fetch(action + '?id=' + id, {
+                method: 'put',
+                body: JSON.stringify({id: id, name: name, bday: bday})
+            }).then(response => {
+                response.ok ? alert('Updated') : response.text().then(text => console.log("Error:", text));
+            }).catch(error => console.log(error));
+        }
+    }
+
+    function del(event) {
+        event.preventDefault();
+        h.innerHTML = '';
+        let id = parseInt(event.target.elements.id.value);
+        if (Number.isInteger(id)) {
+            let action = event.target.action;
+            fetch(action + '?id=' + id, {method: 'delete'})
+                .then(response => {
+                    if (response.ok) {
+                        response.json().then(result => {
+                            h.innerHTML = '<div>Id: ' + result.id + '</div>' +
+                                '<div>Name: ' + result.name + '</div>' +
+                                '<div>Birthday: ' + result.bday + '</div>';
+                            alert('Deleted');
+                        }).catch(error => console.log(error))
+                    } else response.text().then(text => console.log("Error:", text));
+                }).catch(error => console.log(error));
+        }
+    }
+
+</script>
+</body>
+</html>

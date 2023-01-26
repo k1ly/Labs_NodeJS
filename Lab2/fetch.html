@@ -1,0 +1,22 @@
+<html>
+    <head></head>
+    <body>
+        
+        <script>
+            fetch('/api/name', {method: 'get'})
+                .then(response => response.json()
+                    .then(result => {
+                        var body = document.getElementsByTagName('body')[0];
+                        let n1 = document.createElement('h1');
+                        n1.innerText = result.n1;
+                        let n2 = document.createElement('h1');
+                        n2.innerText = result.n2;
+                        let n3 = document.createElement('h1');
+                        n3.innerText = result.n3;
+                        body.append(n1, n2, n3);
+                    })
+                ).catch(error =>
+                    console.log('Error:', error));
+        </script>
+    </body>
+</html>

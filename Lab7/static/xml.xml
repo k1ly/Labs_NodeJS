@@ -1,0 +1,17 @@
+<nodes>
+    <node>
+        <name>name1</name>
+        <field1>test</field1>
+        <field2>123</field2>
+    </node>
+    <node>
+        <name>name2</name>
+        <field1>qwe</field1>
+        <field2>435</field2>
+    </node>
+    <node>
+        <name>name3</name>
+        <field1>text</field1>
+        <field2>789</field2>
+    </node>
+</nodes>

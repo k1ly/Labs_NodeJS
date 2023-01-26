@@ -1,0 +1,23 @@
+<html>
+    <head>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    </head>
+    <body>
+        
+        <script>
+            $.ajax('/api/name')
+                .done(resp => {
+                    let response = JSON.parse(resp);
+                    var body = $('body');
+                    let n1 = document.createElement('h1');
+                    n1.innerText = response.n1;
+                    let n2 = document.createElement('h1');
+                    n2.innerText = response.n2;
+                    let n3 = document.createElement('h1');
+                    n3.innerText = response.n3;
+                    body.append(n1, n2, n3);
+                }).fail(error =>
+                    console.log('Error:', error));
+        </script>
+    </body>
+</html>

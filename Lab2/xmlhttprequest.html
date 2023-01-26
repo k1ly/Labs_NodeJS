@@ -1,0 +1,25 @@
+<html>
+    <head></head>
+    <body>
+        
+        <script>
+            let xmlhttprequest = new XMLHttpRequest();
+            xmlhttprequest.open('get', '/api/name', true);
+            xmlhttprequest.onreadystatechange = () => {
+                if(xmlhttprequest.readyState === 4 && xmlhttprequest.status === 200) {
+                    let response = JSON.parse(xmlhttprequest.response);
+                    var body = document.getElementsByTagName('body')[0];
+                    let n1 = document.createElement('h1');
+                    n1.innerText = response.n1;
+                    let n2 = document.createElement('h1');
+                    n2.innerText = response.n2;
+                    let n3 = document.createElement('h1');
+                    n3.innerText = response.n3;
+                    body.append(n1, n2, n3);
+                }
+            }
+            xmlhttprequest.onerror = error => console.log('Error:', error);
+            xmlhttprequest.send();
+        </script>
+    </body>
+</html>
