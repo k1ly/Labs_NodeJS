@@ -1,0 +1,25 @@
+<html>
+    <head></head>
+    <body>
+        
+        <script>
+
+            var start = Date.now();
+            console.log(start);
+
+            for (let i = 0; i < 10; i++) {
+                fetch(`/fact?k=${i}`, {method: 'get'})
+                    .then(response => response.json()
+                        .then(result => {
+                            var body = document.getElementsByTagName('body')[0];
+                            let h = document.createElement('h1');
+                            h.innerText = Date.now() - start + '-' + result.k + '/' + result.fact;
+                            body.append(h);
+                        })
+                    ).catch(error =>
+                    console.log('Error:', error));
+            }
+
+        </script>
+    </body>
+</html>
