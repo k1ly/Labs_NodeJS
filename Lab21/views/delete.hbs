@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Employees</title>
+</head>
+<body>
+<div style="border: 1px solid dimgrey; margin: 5px; padding: 10px">
+    <h1>Телефонный справочник</h1>
+    {{#if error}}
+        <p style="color: darkred; font-weight: bold; font-style: oblique;">
+            Error: {{error}}
+        </p>
+    {{/if}}
+    {{#if data}}
+        <table style="border: 1px solid black">
+            <tbody>
+            {{#each data}}
+                <tr>
+                    <td>
+                        <button disabled>
+                        <span>{{name}}</span>
+                        <span>{{phone}}</span>
+                        </button>
+                    </td>
+                </tr>
+            {{/each}}
+            </tbody>
+        </table>
+    {{/if}}
+    <div style="border: 1px solid dimgrey; margin: 5px; padding: 10px">
+        {{#if entry}}
+            <form action="/update" method="post">
+                {{#with entry}}
+                    <div>ID</div>
+                    <label><input type="hidden" name="id" value="{{id}}"/></label>
+                    <div>Имя</div>
+                    <label><input type="text" name="name" value="{{name}}"/></label>
+                    <div>Телефон</div>
+                    <label><input type="text" name="phone" value="{{phone}}"/></label>
+                    <div>
+                        <input type="submit" value="Обновить"/>
+                    </div>
+                {{/with}}
+            </form>
+        {{/if}}
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Employees</title>
+</head>
+<body>
+<div style="border: 1px solid dimgrey; margin: 5px; padding: 10px">
+    {{#if error}}
+        <p style="color: darkred; font-weight: bold; font-style: oblique;">
+            Error: {{error}}
+        </p>
+    {{/if}}
+    {{#if data}}
+        <table style="border: 1px solid black">
+            <thead style="background: #bbc8ed;">
+            <tr>
+                <th>ID</th>
+                <th>Имя</th>
+                <th>Возраст</th>
+                <th>Стаж</th>
+                <th>Почта</th>
+                <th>Начальник</th>
+                <th>Вакансия</th>
+            </tr>
+            </thead>
+            <tbody>
+            {{#each data}}
+                <tr>
+                    <td>{{id}}</td>
+                    <td>{{name}}</td>
+                    <td>{{age}}</td>
+                    <td>{{exp}}</td>
+                    <td>{{email}}</td>
+                    <td>{{manager}}</td>
+                    <td>{{vacancy}}</td>
+                </tr>
+            {{/each}}
+            </tbody>
+        </table>
+    {{/if}}
+</div>
+<div style="border: 1px solid dimgrey; margin: 5px; padding: 10px">
+    <h1>Создать работника</h1>
+    <form action="/employees/add" method="post">
+        <div>Имя</div>
+        <label><input type="text" name="name"/></label>
+        <div>Возраст</div>
+        <label><input type="text" name="age"/></label>
+        <div>Стаж</div>
+        <label><input type="text" name="exp"/></label>
+        <div>Почта</div>
+        <label><input type="text" name="email"/></label>
+        <div>Начальник</div>
+        <label><input type="text" name="manager"/></label>
+        <div>Вакансия</div>
+        <label><input type="text" name="vacancy"/></label>
+        <div>
+            <input type="submit" value="Добавить"/>
+        </div>
+    </form>
+</div>
+<div style="border: 1px solid dimgrey; margin: 5px; padding: 10px">
+    <h1>Обновить работника</h1>
+    <form action="/employees/update" method="post">
+        <div>ID</div>
+        <label><input type="text" name="id"/></label>
+        <div>Имя</div>
+        <label><input type="text" name="name"/></label>
+        <div>Возраст</div>
+        <label><input type="text" name="age"/></label>
+        <div>Стаж</div>
+        <label><input type="text" name="exp"/></label>
+        <div>Почта</div>
+        <label><input type="text" name="email"/></label>
+        <div>Начальник</div>
+        <label><input type="text" name="manager"/></label>
+        <div>Вакансия</div>
+        <label><input type="text" name="vacancy"/></label>
+        <div>
+            <input type="submit" value="Обновить"/>
+        </div>
+    </form>
+</div>
+<div style="border: 1px solid dimgrey; margin: 5px; padding: 10px">
+    <h1>Удалить работника</h1>
+    <form action="/employees/delete" method="post">
+        <div>ID</div>
+        <label><input type="text" name="id"/></label>
+        <div>
+            <input type="submit" value="Удалить"/>
+        </div>
+    </form>
+</div>
+</body>
+</html>

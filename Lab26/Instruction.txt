@@ -1,0 +1,100 @@
+**CA - SAD**
+
+**Resource - LKE**
+
+**!!! При смене ролей, инициалы SAD и LKE поменять местами. !!!**
+
+1. **CA** генерирует свой приватный ключ `ca-sad.key`:
+```
+> openssl genrsa -des3 -out ca-sad.key 2048
+Enter PEM pass phrase:1111
+Verifying - Enter PEM pass phrase:1111
+```
+
+1. **CA** генерирует свой сертификат `ca-sad.crt`:
+```
+> openssl req -x509 -new -key ca-sad.key -days 700 -sha256 -out ca-sad.crt
+Enter pass phrase for ca-sad.key:1111
+You are about to be asked to enter information that will be incorporated
+into your certificate request.
+What you are about to enter is what is called a Distinguished Name or a DN.
+There are quite a few fields but you can leave some blank
+For some fields there will be a default value,
+If you enter '.', the field will be left blank.
+-----
+Country Name (2 letter code) [AU]:BY
+State or Province Name (full name) [Some-State]:Minsk
+Locality Name (eg, city) []:Minsk
+Organization Name (eg, company) [Internet Widgits Pty Ltd]: CA-Lab26-SAD
+Organizational Unit Name (eg, section) []:CA-Lab26-SAD
+Common Name (e.g. server FQDN or YOUR name) []:CA-Lab26-SAD
+Email Address []:maksdadapayr@mail.ru
+```
+
+1. **Resource** генерирует свой приватный ключ `res-lke.key`:
+```
+> openssl genrsa -out res-lke.key 2048
+```
+
+1. **Resource** генерирует запрос на сертификат `res-lke.csr` на основе конфига `res-lke.cfg`:
+```
+> openssl req -new -key res-lke.key -out res-lke.csr -sha256 -config res-lke.cfg
+```
+
+1. **Resource** передаёт файлы `res-lke.cfg` и `res-lke.csr` **CA**.
+
+2. **CA** генерирует сертификат `res-lke.crt` для **Resource**:
+```
+> openssl x509 -req -in res-lke.csr -CA ca-sad.crt -CAkey ca-sad.key -CAcreateserial -out res-lke.crt -days 365 -sha256 -extensions v3_req -extfile res-lke.cfg
+```
+
+1. **CA** отправляет сертификаты `ca-sad.crt` и `res-lke.crt` **Resource**'у.
+
+2. **Resource** сохраняет сертификаты в папку `Lab-26`.
+
+3.  **Resource** устанавливает сертификат **CA** (`ca-sad.crt`) в хранилище сертификатов:
+```
+> mmc
+или
+> WIN+R > certmgr.msc
+```
+
+1.  В открытом `mmc` проделать следующее:
+```txt
+Выбрать в меню слева вверху: `Файл → Добавить или удалить оснастку...`
+В меню `Доступные оснастки` выбрать `Сертификаты → Добавить → ОК`
+В меню слева раскрыть вкладку Сертификаты - текущий пользователь
+Затем раскрыть вкладку Доверенные корневые центры сертификации
+Щёлкнуть ПКМ по папке Сертификаты, затем Все задачи → Импорт...
+Нажать Далее
+Выбрать имя файла: ca-sad.crt
+Нажать Далее
+Снова нажать Далее
+Нажать Готово
+```
+
+1.  **Resource** добавляет в файл `hosts` (`C:\Windows\System32\drivers\etc\hosts`) строки:
+```txt
+127.0.0.1   Lab26-LKE
+127.0.0.1   LKE
+```
+
+1.  **Resource** запускает сервер `src\index.js`:
+```js
+const https = require('https');
+const fs = require('fs')
+
+const options = {
+  key: fs.readFileSync('res-lke.key').toString(),
+  cert: fs.readFileSync('res-lke.crt').toString()
+}
+
+https.createServer(options, (req, res) => {
+  res.writeHead(200, {
+    'Content-Type': 'text/html'
+  });
+  res.end('<h1>Hello from HTTPS</h1>');
+}).listen(3000, () => {
+  console.log('Server started at https://localhost:3000');
+});
+```

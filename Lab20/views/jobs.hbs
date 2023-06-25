@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Jobs</title>
+</head>
+<body>
+<div style="border: 1px solid dimgrey; margin: 5px; padding: 10px">
+    {{#if error}}
+        <p style="color: darkred; font-weight: bold; font-style: oblique;">
+            Error: {{error}}
+        </p>
+    {{/if}}
+    {{#if data}}
+        <table style="border: 1px solid black">
+            <thead style="background: #bbc8ed;">
+            <tr>
+                <th>ID</th>
+                <th>Название</th>
+                <th>Заказчик</th>
+                <th>Дедлайн</th>
+                <th>Начало</th>
+                <th>Конец</th>
+                <th>Стоимость</th>
+                <th>Тип</th>
+            </tr>
+            </thead>
+            <tbody>
+            {{#each data}}
+                <tr>
+                    <td>{{id}}</td>
+                    <td>{{title}}</td>
+                    <td>{{customer}}</td>
+                    <td>{{deadline}}</td>
+                    <td>{{start}}</td>
+                    <td>{{finish}}</td>
+                    <td>{{price}}</td>
+                    <td>{{type}}</td>
+                </tr>
+            {{/each}}
+            </tbody>
+        </table>
+    {{/if}}
+</div>
+<div style="border: 1px solid dimgrey; margin: 5px; padding: 10px">
+    <h1>Создать задачу</h1>
+    <form action="/jobs/add" method="post">
+        <div>Название</div>
+        <label><input type="text" name="title"/></label>
+        <div>Заказчик</div>
+        <label><input type="text" name="customer"/></label>
+        <div>Дедлайн</div>
+        <label><input type="text" name="deadline"/></label>
+        <div>Начало</div>
+        <label><input type="text" name="start"/></label>
+        <div>Конец</div>
+        <label><input type="text" name="finish"/></label>
+        <div>Стоимость</div>
+        <label><input type="text" name="price"/></label>
+        <div>Тип</div>
+        <label><input type="text" name="type"/></label>
+        <div>
+            <input type="submit" value="Добавить"/>
+        </div>
+    </form>
+</div>
+<div style="border: 1px solid dimgrey; margin: 5px; padding: 10px">
+    <h1>Обновить задачу</h1>
+    <form action="/jobs/update" method="post">
+        <div>ID</div>
+        <label><input type="text" name="id"/></label>
+        <div>Название</div>
+        <label><input type="text" name="title"/></label>
+        <div>Заказчик</div>
+        <label><input type="text" name="customer"/></label>
+        <div>Дедлайн</div>
+        <label><input type="text" name="deadline"/></label>
+        <div>Начало</div>
+        <label><input type="text" name="start"/></label>
+        <div>Конец</div>
+        <label><input type="text" name="finish"/></label>
+        <div>Стоимость</div>
+        <label><input type="text" name="price"/></label>
+        <div>Тип</div>
+        <label><input type="text" name="type"/></label>
+        <div>
+            <input type="submit" value="Обновить"/>
+        </div>
+    </form>
+</div>
+<div style="border: 1px solid dimgrey; margin: 5px; padding: 10px">
+    <h1>Удалить задачу</h1>
+    <form action="/jobs/delete" method="post">
+        <div>ID</div>
+        <label><input type="text" name="id"/></label>
+        <div>
+            <input type="submit" value="Удалить"/>
+        </div>
+    </form>
+</div>
+</body>
+</html>

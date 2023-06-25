@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div style="border: 1px solid dimgrey; margin: 5px; padding: 10px">
+    {{#if error}}
+        <p style="color: darkred; font-weight: bold; font-style: oblique;">
+            Error: {{error}}
+        </p>
+    {{/if}}
+    {{#if data}}
+        <table style="border: 1px solid black">
+            <thead style="background: #bbc8ed;">
+            <tr>
+                <th>ID</th>
+                <th>Название</th>
+            </tr>
+            </thead>
+            <tbody>
+            {{#each data}}
+                <tr>
+                    <td>{{id}}</td>
+                    <td>{{name}}</td>
+                </tr>
+            {{/each}}
+            </tbody>
+        </table>
+    {{/if}}
+</div>
+<div style="border: 1px solid dimgrey; margin: 5px; padding: 10px">
+    <h1>Создать профессию</h1>
+    <form action="/offices/add" method="post">
+        <div>Название</div>
+        <label><input type="text" name="name"/></label>
+        <div>
+            <input type="submit" value="Добавить"/>
+        </div>
+    </form>
+</div>
+<div style="border: 1px solid dimgrey; margin: 5px; padding: 10px">
+    <h1>Обновить профессию</h1>
+    <form action="/offices/update" method="post">
+        <div>ID</div>
+        <label><input type="text" name="id"/></label>
+        <div>Название</div>
+        <label><input type="text" name="name"/></label>
+        <div>
+            <input type="submit" value="Обновить"/>
+        </div>
+    </form>
+</div>
+<div style="border: 1px solid dimgrey; margin: 5px; padding: 10px">
+    <h1>Удалить профессию</h1>
+    <form action="/offices/delete" method="post">
+        <div>ID</div>
+        <label><input type="text" name="id"/></label>
+        <div>
+            <input type="submit" value="Удалить"/>
+        </div>
+    </form>
+</div>
+</body>
+</html>

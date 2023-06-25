@@ -1,0 +1,51 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlserver"
+  url      = env("DATABASE_URL")
+}
+
+model AUDITORIUM {
+  AUDITORIUM            String          @id(map: "PK__AUDITORI__5372601040441614") @db.NChar(10)
+  AUDITORIUM_NAME       String?         @db.NVarChar(200)
+  AUDITORIUM_CAPACITY   Decimal?        @db.Decimal(4, 0)
+  AUDITORIUM_TYPE       String          @db.NChar(10)
+  Auditorium_type       AUDITORIUM_TYPE @relation(fields: [AUDITORIUM_TYPE], references: [AUDITORIUM_TYPE], onUpdate: NoAction, map: "FK__AUDITORIU__AUDIT__10566F31")
+}
+
+model AUDITORIUM_TYPE {
+  AUDITORIUM_TYPE       String       @id(map: "AUDITORIUM_TYPE_PK") @db.NChar(10)
+  AUDITORIUM_TYPENAME   String       @db.NVarChar(30)
+  Auditoriums           AUDITORIUM[]
+}
+
+model FACULTY {
+  FACULTY               String   @id(map: "PK_FACULTY") @db.NChar(10)
+  FACULTY_NAME          String?  @db.NVarChar(50)
+  Pulpits               PULPIT[]
+}
+
+model PULPIT {
+  PULPIT                String    @id(map: "PK_PULPIT") @db.NChar(10)
+  PULPIT_NAME           String?   @db.NVarChar(100)
+  FACULTY               String    @db.NChar(10)
+  Faculty               FACULTY   @relation(fields: [FACULTY], references: [FACULTY], onUpdate: NoAction, map: "FK_PULPIT_FACULTY")
+  Subjects              SUBJECT[]
+  Teachers              TEACHER[]
+}
+
+model SUBJECT {
+  SUBJECT               String @id(map: "PK_SUBJECT") @db.NChar(10)
+  SUBJECT_NAME          String @db.NVarChar(50)
+  PULPIT                String @db.NChar(10)
+  Pulpit                PULPIT @relation(fields: [PULPIT], references: [PULPIT], onUpdate: NoAction, map: "FK_SUBJECT_PULPIT")
+}
+
+model TEACHER {
+  TEACHER               String  @id(map: "PK_TEACHER") @db.NChar(10)
+  TEACHER_NAME          String? @db.NVarChar(50)
+  PULPIT                String  @db.NChar(10)
+  Pulpit                PULPIT  @relation(fields: [PULPIT], references: [PULPIT], onUpdate: NoAction, map: "FK_TEACHER_PULPIT")
+}

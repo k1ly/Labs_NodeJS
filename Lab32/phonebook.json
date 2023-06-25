@@ -1,0 +1,17 @@
+[
+  {
+    "id": 1,
+    "name": "name1",
+    "phoneNumber": "1234567890"
+  },
+  {
+    "id": 2,
+    "name": "name2",
+    "phoneNumber": "9876543210"
+  },
+  {
+    "id": 3,
+    "name": "name3",
+    "phoneNumber": "1234560987"
+  }
+]

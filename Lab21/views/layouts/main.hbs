@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Employees</title>
+    {{#if disabled}}
+        <link rel="stylesheet" href="/static/style.css">
+    {{/if}}
+</head>
+<body>
+<div style="border: 1px solid dimgrey; margin: 5px; padding: 10px">
+    <h1>Телефонный справочник</h1>
+    {{#if error}}
+        <p style="color: darkred; font-weight: bold; font-style: oblique;">
+            Error: {{error}}
+        </p>
+    {{/if}}
+    {{#if data}}
+        <table style="border: 1px solid black">
+            <tbody>
+            {{#each data}}
+                {{>contact}}
+            {{/each}}
+            </tbody>
+        </table>
+    {{/if}}
+    {{{body}}}
+</div>
+</body>
+</html>

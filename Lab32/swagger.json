@@ -1,0 +1,113 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "TS_API",
+    "description": "API for accessing the phonebook data",
+    "version": "1.0"
+  },
+  "paths": {
+    "/TS": {
+      "get": {
+        "description": "Get the full list of phones from the phonebook",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Phone"
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "description": "Add a new phone to the phonebook",
+        "parameters": [
+          {
+            "name": "phone",
+            "in": "body",
+            "description": "Phone object to be added",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Phone"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Phone added successfully"
+          }
+        }
+      },
+      "put": {
+        "description": "Update a phonebook entry",
+        "parameters": [
+          {
+            "name": "phone",
+            "in": "body",
+            "description": "Updated phone object",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Phone"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Phone updated successfully"
+          },
+          "404": {
+            "description": "Phone not found"
+          }
+        }
+      },
+      "delete": {
+        "description": "Delete a phonebook entry",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "body",
+            "description": "ID of the phone to be deleted",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/DeletePhone"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Phone deleted successfully"
+          },
+          "404": {
+            "description": "Phone not found"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Phone": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        },
+        "phoneNumber": {
+          "type": "string"
+        }
+      }
+    },
+    "DeletePhone": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        }
+      }
+    }
+  }
+}

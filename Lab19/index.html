@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.min.js"></script>
+    <style>
+        #pagination button {
+            width: 60px;
+        }
+    </style>
+</head>
+<body>
+<div style="border: 1px solid dimgrey; margin: 5px; padding: 10px">
+    <h1>Result</h1>
+    <h3 id="result"></h3>
+    <div id="pagination"></div>
+</div>
+<div style="border: 1px solid dimgrey; margin: 5px; padding: 10px">
+    <h1>Get Pulpits</h1>
+    <form action="/api/pulpits" onsubmit="getPulpits(event);">
+        <div>
+            <input type="submit" value="GET"/>
+        </div>
+    </form>
+</div>
+<div style="border: 1px solid dimgrey; margin: 5px; padding: 10px">
+    <h1>Add Pulpit</h1>
+    <form action="/api/pulpits" onsubmit="addPulpits(event);">
+        <div>PULPIT</div>
+        <label><input type="text" name="pulpit"/></label>
+        <div>PULPIT_NAME</div>
+        <label><input type="text" name="pulpitName"/></label>
+        <div>FACULTY</div>
+        <label><input type="text" name="faculty"/></label>
+        <div>
+            <input type="submit" value="ADD"/>
+        </div>
+    </form>
+</div>
+<div style="border: 1px solid dimgrey; margin: 5px; padding: 10px">
+    <h1>Update Pulpit</h1>
+    <form action="/api/pulpits" onsubmit="updatePulpits(event);">
+        <div>PULPIT</div>
+        <label><input type="text" name="pulpit"/></label>
+        <div>PULPIT_NAME</div>
+        <label> <input type="text" name="pulpitName"/></label>
+        <div>FACULTY</div>
+        <label> <input type="text" name="faculty"/></label>
+        <div>
+            <input type="submit" value="UPDATE"/>
+        </div>
+    </form>
+</div>
+<div style="border: 1px solid dimgrey; margin: 5px; padding: 10px">
+    <h1>Delete Pulpit</h1>
+    <form action="/api/pulpits" onsubmit="deletePulpits(event);">
+        <div>PULPIT</div>
+        <label> <input type="text" name="pulpit"/></label>
+        <div>
+            <input type="submit" value="DELETE"/>
+        </div>
+    </form>
+</div>
+<script>
+    let h = document.getElementById('result');
+    let p = document.getElementById('pagination');
+    let page = {number: 1, size: 10};
+
+    function submitPage(number) {
+        page.number = number;
+        getPulpits({target: {action: '/api/pulpits'}, preventDefault: () => null});
+    }
+
+    function getPulpits(event) {
+        event.preventDefault();
+        h.innerHTML = '';
+        p.innerHTML = '';
+        axios.get(event.target.action, {
+            params: page,
+            headers: {'Accept': 'application/json'}
+        }).then(result => {
+            let html = '<table style="border: 1px solid black">' +
+                '<thead style="background: #bbc8ed;"><tr><th>PULPIT</th><th>PULPIT_NAME</th><th>FACULTY</th><th>Teachers count</th></tr></thead><tbody>';
+            for (let element of result.data) {
+                html += `<tr><td>${element.PULPIT}</td><td>${element.PULPIT_NAME}</td><td>${element.FACULTY}</td><td>${element._count.Teachers}</td></tr>`;
+            }
+            html += '</tbody>';
+            h.innerHTML = html;
+            let pagination = '';
+            if (page.number > 2)
+                pagination += '<button onclick="submitPage(1)">1</button>';
+            if (page.number > 1)
+                pagination += '<button onclick="submitPage(page.number-1)"><<</button>';
+            pagination += `<button onclick="submitPage(page.number)">${page.number}</button>`;
+            if (result.data.length > 0)
+                pagination += `<button onclick="submitPage(page.number+1)">>></button>`;
+            p.innerHTML = pagination;
+        }).catch(error => {
+            h.innerHTML = 'Error:' + error.response ? error.response.data : error;
+            alert(error.response.data);
+        });
+    }
+
+    function addPulpits(event) {
+        event.preventDefault();
+        h.innerHTML = '';
+        p.innerHTML = '';
+        axios.post(event.target.action,
+            JSON.stringify({
+                PULPIT: event.target.elements.pulpit.value,
+                PULPIT_NAME: event.target.elements.pulpitName.value,
+                FACULTY: event.target.elements.faculty.value
+            }),
+            {headers: {'Accept': 'application/json'}})
+            .then(result => {
+                let html = '<table style="border: 1px solid black">' +
+                    '<thead style="background: #bbc8ed;"><tr><th>PULPIT</th><th>PULPIT_NAME</th><th>FACULTY</th></tr></thead><tbody>';
+                html += `<tr><td>${result.data.PULPIT}</td><td>${result.data.PULPIT_NAME}</td><td>${result.data.FACULTY}</td></tr>`;
+                html += '</tbody>';
+                h.innerHTML = html;
+            }).catch(error => {
+            h.innerHTML = 'Error:' + error.response ? error.response.data : error;
+            alert(error.response.data);
+        });
+    }
+
+    function updatePulpits(event) {
+        event.preventDefault();
+        h.innerHTML = '';
+        p.innerHTML = '';
+        axios.put(`${event.target.action}/${event.target.elements.pulpit.value}`,
+            JSON.stringify({
+                PULPIT: event.target.elements.pulpit.value,
+                PULPIT_NAME: event.target.elements.pulpitName.value,
+                FACULTY: event.target.elements.faculty.value
+            }),
+            {headers: {'Accept': 'application/json'}})
+            .then(result => {
+                let html = '<table style="border: 1px solid black">' +
+                    '<thead style="background: #bbc8ed;"><tr><th>PULPIT</th><th>PULPIT_NAME</th><th>FACULTY</th></tr></thead><tbody>';
+                html += `<tr><td>${result.data.PULPIT}</td><td>${result.data.PULPIT_NAME}</td><td>${result.data.FACULTY}</td></tr>`;
+                html += '</tbody>';
+                h.innerHTML = html;
+            }).catch(error => {
+            h.innerHTML = 'Error:' + error.response ? error.response.data : error;
+            alert(error.response.data);
+        });
+    }
+
+    function deletePulpits(event) {
+        event.preventDefault();
+        h.innerHTML = '';
+        p.innerHTML = '';
+        axios.delete(`${event.target.action}/${event.target.elements.pulpit.value}`,
+            {headers: {'Accept': 'application/json'}})
+            .then(result => {
+                let html = '<table style="border: 1px solid black">' +
+                    '<thead style="background: #bbc8ed;"><tr><th>PULPIT</th><th>PULPIT_NAME</th><th>FACULTY</th></tr></thead><tbody>';
+                html += `<tr><td>${result.data.PULPIT}</td><td>${result.data.PULPIT_NAME}</td><td>${result.data.FACULTY}</td></tr>`;
+                html += '</tbody>';
+                h.innerHTML = html;
+            }).catch(error => {
+            h.innerHTML = 'Error:' + error.response ? error.response.data : error;
+            alert(error.response.data);
+        });
+    }
+</script>
+</body>
+</html>

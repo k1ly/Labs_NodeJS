@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.min.js"></script>
+</head>
+<body>
+<div style="border: 1px solid dimgrey; margin: 5px; padding: 10px">
+    <h3 id="result"></h3>
+</div>
+<div style="border: 1px solid dimgrey; margin: 5px; padding: 10px">
+    <h1>Вывести работников</h1>
+    <form action="/api/employees" onsubmit="getEmployees(event);">
+        <div>
+            <input type="submit" value="Загрузить"/>
+        </div>
+    </form>
+</div>
+<div style="border: 1px solid dimgrey; margin: 5px; padding: 10px">
+    <h1>Создать работника</h1>
+    <form action="/api/employees" onsubmit="addEmployee(event);">
+        <div>Имя</div>
+        <label><input type="text" name="name"/></label>
+        <div>Возраст</div>
+        <label><input type="text" name="age"/></label>
+        <div>Стаж</div>
+        <label><input type="text" name="exp"/></label>
+        <div>Почта</div>
+        <label><input type="text" name="email"/></label>
+        <div>Начальник</div>
+        <label><input type="text" name="manager"/></label>
+        <div>Вакансия</div>
+        <label><input type="text" name="vacancy"/></label>
+        <div>
+            <input type="submit" value="Добавить"/>
+        </div>
+    </form>
+</div>
+<div style="border: 1px solid dimgrey; margin: 5px; padding: 10px">
+    <h1>Обновить работника</h1>
+    <form action="/api/employees" onsubmit="updateEmployee(event);">
+        <div>ID</div>
+        <label><input type="text" name="id"/></label>
+        <div>Имя</div>
+        <label><input type="text" name="name"/></label>
+        <div>Возраст</div>
+        <label><input type="text" name="age"/></label>
+        <div>Стаж</div>
+        <label><input type="text" name="exp"/></label>
+        <div>Почта</div>
+        <label><input type="text" name="email"/></label>
+        <div>Начальник</div>
+        <label><input type="text" name="manager"/></label>
+        <div>Вакансия</div>
+        <label><input type="text" name="vacancy"/></label>
+        <div>
+            <input type="submit" value="Обновить"/>
+        </div>
+    </form>
+</div>
+<div style="border: 1px solid dimgrey; margin: 5px; padding: 10px">
+    <h1>Удалить работника</h1>
+    <form action="/api/employees" onsubmit="deleteEmployee(event);">
+        <div>ID</div>
+        <label><input type="text" name="id"/></label>
+        <div>
+            <input type="submit" value="Удалить"/>
+        </div>
+    </form>
+</div>
+<script>
+    let h = document.getElementById('result');
+
+    function getEmployees(event) {
+        event.preventDefault();
+        h.innerHTML = '';
+        axios.get(event.target.action, {headers: {'Accept': 'application/json'}})
+            .then(result => {
+                let html = '<table style="border: 1px solid black">' +
+                    '<thead style="background: #bbc8ed;">' +
+                    '<tr><th>ID</th><th>Имя</th><th>Возраст</th><th>Стаж</th><th>Почта</th><th>Начальник</th><th>Вакансия</th></tr>' +
+                    '</thead><tbody>';
+                for (let element of result.data) {
+                    html += `<tr><td>${element.id}</td><td>${element.name}</td><td>${element.age}</td><td>${element.exp}</td>` +
+                        `<td>${element.email}</td><td>${element.manager}</td><td>${element.vacancy}</td></tr>`;
+                }
+                html += '</tbody>';
+                h.innerHTML = html;
+            }).catch(error => {
+            h.innerHTML = 'Error:' + error.response ? error.response.data : error;
+            alert(error.response.data);
+        });
+    }
+
+    function addEmployee(event) {
+        event.preventDefault();
+        h.innerHTML = '';
+        axios.post(event.target.action,
+            JSON.stringify({
+                name: event.target.elements.name.value === '' ? null : event.target.elements.name.value,
+                age: event.target.elements.age.value === '' ? null : event.target.elements.age.value,
+                exp: event.target.elements.exp.value === '' ? null : event.target.elements.exp.value,
+                email: event.target.elements.email.value === '' ? null : event.target.elements.email.value,
+                manager: event.target.elements.manager.value === '' ? null : event.target.elements.manager.value,
+                vacancy: event.target.elements.vacancy.value === '' ? null : event.target.elements.vacancy.value
+            }),
+            {headers: {'Accept': 'application/json'}})
+            .then(result => {
+                let html = '<table style="border: 1px solid black">' +
+                    '<thead style="background: #bbc8ed;">' +
+                    '<tr><th>ID</th><th>Имя</th><th>Возраст</th><th>Стаж</th><th>Почта</th><th>Начальник</th><th>Вакансия</th></tr>' +
+                    '</thead><tbody>';
+                html += `<tr><td>${result.data.id}</td><td>${result.data.name}</td><td>${result.data.age}</td><td>${result.data.exp}</td>` +
+                    `<td>${result.data.email}</td><td>${result.data.manager}</td><td>${result.data.vacancy}</td></tr>`;
+                html += '</tbody>';
+                h.innerHTML = html;
+            }).catch(error => {
+            h.innerHTML = 'Error:' + error.response ? error.response.data : error;
+            alert(error.response.data);
+        });
+    }
+
+    function updateEmployee(event) {
+        event.preventDefault();
+        h.innerHTML = '';
+        axios.put(`${event.target.action}/${event.target.elements.id.value}`,
+            JSON.stringify({
+                name: event.target.elements.name.value === '' ? undefined : event.target.elements.name.value,
+                age: event.target.elements.age.value === '' ? undefined : event.target.elements.age.value,
+                exp: event.target.elements.exp.value === '' ? undefined : event.target.elements.exp.value,
+                email: event.target.elements.email.value === '' ? undefined : event.target.elements.email.value,
+                manager: event.target.elements.manager.value === '' ? undefined : event.target.elements.manager.value,
+                vacancy: event.target.elements.vacancy.value === '' ? undefined : event.target.elements.vacancy.value
+            }),
+            {headers: {'Accept': 'application/json'}})
+            .then(result => {
+                let html = '<table style="border: 1px solid black">' +
+                    '<thead style="background: #bbc8ed;">' +
+                    '<tr><th>ID</th><th>Имя</th><th>Возраст</th><th>Стаж</th><th>Почта</th><th>Начальник</th><th>Вакансия</th></tr>' +
+                    '</thead><tbody>';
+                html += `<tr><td>${result.data.id}</td><td>${result.data.name}</td><td>${result.data.age}</td><td>${result.data.exp}</td>` +
+                    `<td>${result.data.email}</td><td>${result.data.manager}</td><td>${result.data.vacancy}</td></tr>`;
+                html += '</tbody>';
+                h.innerHTML = html;
+            }).catch(error => {
+            h.innerHTML = 'Error:' + error.response ? error.response.data : error;
+            alert(error.response.data);
+        });
+    }
+
+    function deleteEmployee(event) {
+        event.preventDefault();
+        h.innerHTML = '';
+        axios.delete(`${event.target.action}/${event.target.elements.id.value}`,
+            {headers: {'Accept': 'application/json'}})
+            .then(result => {
+                let html = '<table style="border: 1px solid black">' +
+                    '<thead style="background: #bbc8ed;">' +
+                    '<tr><th>ID</th><th>Имя</th><th>Возраст</th><th>Стаж</th><th>Почта</th><th>Начальник</th><th>Вакансия</th></tr>' +
+                    '</thead><tbody>';
+                html += `<tr><td>${result.data.id}</td><td>${result.data.name}</td><td>${result.data.age}</td><td>${result.data.exp}</td>` +
+                    `<td>${result.data.email}</td><td>${result.data.manager}</td><td>${result.data.vacancy}</td></tr>`;
+                html += '</tbody>';
+                h.innerHTML = html;
+            }).catch(error => {
+            h.innerHTML = 'Error:' + error.response ? error.response.data : error;
+            alert(error.response.data);
+        });
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,19 @@
+<div style="border: 1px solid dimgrey; margin: 5px; padding: 10px">
+    {{#if entry}}
+        <form method="post">
+            {{#with entry}}
+                <label><input type="hidden" name="id" value="{{id}}"/></label>
+                <div>Имя</div>
+                <label><input class="contact" type="text" name="name" value="{{name}}"/></label>
+                <div>Телефон</div>
+                <label><input class="contact" type="text" name="phone" value="{{phone}}"/></label>
+            {{/with}}
+            <div>
+                <input onclick="this.form.action='/update'" type="submit" value="Обновить"/>
+                <input id="submitDelete" onclick="this.form.action='/delete'" type="submit" value="Удалить"/>
+                {{{buttonCancel cancelText}}}
+            </div>
+        </form>
+    {{/if}}
+</div>
+<script src="/static/script.js"></script>
